@@ -12,7 +12,7 @@ import java.util.Random;
 public class NotSimpleServer {
             private static ArrayList<String> packets = new ArrayList<>();
     public static void main(String[] args) throws IOException {
-
+        System.out.println("hi");
         // Hard code in port number if necessary:
         args = new String[]{"30121"};
 
@@ -31,8 +31,10 @@ public class NotSimpleServer {
             String usersRequest;
 
             while ((usersRequest = requestReader1.readLine()) != null) {
+
                 if (!usersRequest.startsWith("DROPPED")) {
                     packets = new ArrayList<>();
+                    System.out.println("first test");
                     System.out.println("\"" + usersRequest + "\" received");
                     String response = getQuote(usersRequest);
                     System.out.println("Responding: \"" + response + "\"");
@@ -62,9 +64,9 @@ public class NotSimpleServer {
         int totalPackets = arrayList.size();
         for (int i = 0; i < arrayList.size(); i++) {
             int idNum = i + 1;
-            if (Math.random() < .8) {
+          //  if (Math.random() < .8) { ****************************************************************
                 responseWriter1.println(idNum + "$" + totalPackets + "$" + arrayList.get(i));
-            }
+           // }
         }
         responseWriter1.println("***ALL PACKETS SENT***");
     }
@@ -109,7 +111,7 @@ public class NotSimpleServer {
             packets = new ArrayList<>();
             int packetLength = length / 20;
             for (int i = 0; i < 20; i++) {
-                packets.set(i, string.substring(i * packetLength, (i + 1) * packetLength));
+                packets.add(string.substring(i * packetLength, (i + 1) * packetLength));
             }
             // Get any remaining characters
             if (length % 20 != 0) {
