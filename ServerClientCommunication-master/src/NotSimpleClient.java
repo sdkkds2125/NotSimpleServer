@@ -35,7 +35,11 @@ public class NotSimpleClient {
             String serverResponse;
             while ((userInput = stdIn.readLine()) != null) {
                 requestWriter.println(userInput); // send request to server
-                serverResponse = responseReader.readLine();
+                while ((serverResponse = responseReader.readLine()) != null){
+                    System.out.println(serverResponse);
+
+                }
+
                 System.out.println("SERVER RESPONDS: \"" + serverResponse + "\"");
             }
         } catch (UnknownHostException e) {

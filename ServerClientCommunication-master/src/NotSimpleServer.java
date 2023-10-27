@@ -41,6 +41,7 @@ public class NotSimpleServer {
                     packets = breakUpStringIntoPackets(response);
                     sendPackets(responseWriter1, packets);
                 } else {
+                    System.out.println("ELSE");
                     String[] droppedPackets = usersRequest.split("\\$");
                     ArrayList<String> resendPackets = new ArrayList<>();
                     System.out.println("\"" + usersRequest + "\" received for dropped packets");
@@ -56,16 +57,18 @@ public class NotSimpleServer {
                     "Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
         }
-
+        System.out.println("Code ended");
 
     }
 
     private static void sendPackets(PrintWriter responseWriter1, ArrayList<String > arrayList) {
         int totalPackets = arrayList.size();
         for (int i = 0; i < arrayList.size(); i++) {
+
             int idNum = i + 1;
           //  if (Math.random() < .8) { ****************************************************************
                 responseWriter1.println(idNum + "$" + totalPackets + "$" + arrayList.get(i));
+
            // }
         }
         responseWriter1.println("***ALL PACKETS SENT***");
