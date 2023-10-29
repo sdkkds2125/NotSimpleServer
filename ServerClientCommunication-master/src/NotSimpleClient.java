@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class NotSimpleClient {
-    private static String[] packetsReceived = new String[20];
+    private static String[] packetsReceived;
     //private static boolean[] received = new boolean[20];
     private static String dropped = "DROPPED";
     private static boolean wasDropped = false;
@@ -46,25 +46,27 @@ public class NotSimpleClient {
             String serverResponse;
 
             while ((userInput = stdIn.readLine()) != null) {
+                wasDropped =false;
+                packetsReceived = new String[20];
                 requestWriter.println(userInput); // send request to server
-               // while (!wasDropped) {
+                while (!wasDropped) {
                     while (!Objects.equals(serverResponse = responseReader.readLine(), "***ALL PACKETS SENT***")) {
                         parsePacket(serverResponse);
                     }
-                    checkedForDroppedPackets(requestWriter,responseReader);
-//                    if (wasDropped) {
-//                        System.out.println("sending dropped");
-//                        requestWriter.println(dropped);
-//                        wasDropped = false;
-//                    } else {
-                String done = String.join("",packetsReceived);
-                System.out.println(done);
-                        System.out.println(Arrays.toString(packetsReceived));
+                    checkedForDroppedPackets();
+                    if (wasDropped) {
+                        System.out.println("sending dropped");
+                        requestWriter.println(dropped);
+                        wasDropped = false;
+                    } else {
+                        String done = String.join("", packetsReceived);
+                        System.out.println(done);
                         System.out.println(serverResponse);
-                 //   }
+                        wasDropped = true;
+                    }
 
-              //  }
-
+                }
+                System.out.println("ouside loop");
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
@@ -88,20 +90,20 @@ public class NotSimpleClient {
         //received[index] = true;
     }
 
-//    private static void checkedForDroppedPackets() {
-//        System.out.println("in check");
-//        wasDropped = false;
-//        dropped = "DROPPED";
-//        for (int i = 0; i < packetsReceived.length; i++) {
-//            // for (int i = 0; i < 20; i++){
-////
-//            if (packetsReceived[i] == null) {
-//                dropped += "$" + i;
-//                wasDropped = true;
-//            }
-//        }
-//    }
-    private static void checkedForDroppedPackets(PrintWriter requestWriter,BufferedReader responseReader ) throws IOException {
+    private static void checkedForDroppedPackets() {
+        System.out.println("in check");
+        wasDropped = false;
+        dropped = "DROPPED";
+        for (int i = 0; i < packetsReceived.length; i++) {
+
+            if (packetsReceived[i] == null) {
+                dropped += "$" + i;
+                wasDropped = true;
+            }
+        }
+    }
+
+    private static void checkedForDroppedPackets(PrintWriter requestWriter, BufferedReader responseReader) throws IOException {
         wasDropped = false;
         String serverResponse;
         for (int i = 0; i < packetsReceived.length; i++) {
@@ -112,12 +114,12 @@ public class NotSimpleClient {
                 wasDropped = true;
             }
         }
-        if (wasDropped){
+        if (wasDropped) {
             requestWriter.println(dropped);
             while (!Objects.equals(serverResponse = responseReader.readLine(), "***ALL PACKETS SENT***")) {
                 parsePacket(serverResponse);
             }
-            checkedForDroppedPackets(requestWriter,responseReader);
+            checkedForDroppedPackets(requestWriter, responseReader);
         }
     }
 }

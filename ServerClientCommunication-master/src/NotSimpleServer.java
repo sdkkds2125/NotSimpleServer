@@ -10,7 +10,8 @@ import java.util.Objects;
 import java.util.Random;
 
 public class NotSimpleServer {
-            private static ArrayList<String> packets = new ArrayList<>();
+    private static ArrayList<String> packets = new ArrayList<>();
+
     public static void main(String[] args) throws IOException {
         System.out.println("hi");
         // Hard code in port number if necessary:
@@ -46,7 +47,7 @@ public class NotSimpleServer {
                     ArrayList<String> resendPackets = new ArrayList<>();
                     System.out.println("\"" + usersRequest + "\" received for dropped packets");
                     // Start loop with 1 since first index in droppedPackets is "DROPPED"
-                    resendDroppedPackets(responseWriter1,  droppedPackets);
+                    resendDroppedPackets(responseWriter1, droppedPackets);
                 }
             }
         } catch (IOException e) {
@@ -58,23 +59,21 @@ public class NotSimpleServer {
 
     }
 
-    private static void sendPackets(PrintWriter responseWriter1, ArrayList<String > arrayList) {
+    private static void sendPackets(PrintWriter responseWriter1, ArrayList<String> arrayList) {
         int totalPackets = arrayList.size();
         for (int i = 0; i < arrayList.size(); i++) {
-
-            int idNum = i;
             if (Math.random() < .8) {
-                responseWriter1.println(idNum + "$" + totalPackets + "$" + arrayList.get(i));
+                responseWriter1.println(i + "$" + totalPackets + "$" + arrayList.get(i));
             }
         }
         responseWriter1.println("***ALL PACKETS SENT***");
     }
 
-    private static void resendDroppedPackets(PrintWriter responseWriter1, String[] droppedPackets){
+    private static void resendDroppedPackets(PrintWriter responseWriter1, String[] droppedPackets) {
         // Start loop with 1 since first index in droppedPackets is "DROPPED"
-        for (int i = 1; i < droppedPackets.length; i++){
+        for (int i = 1; i < droppedPackets.length; i++) {
             if (Math.random() < .8) {
-                responseWriter1.println(droppedPackets[i] + "$" + (droppedPackets.length-1) + "$" +
+                responseWriter1.println(droppedPackets[i] + "$" + (droppedPackets.length - 1) + "$" +
                         packets.get(Integer.parseInt(droppedPackets[i])));
             }
         }
@@ -116,7 +115,7 @@ public class NotSimpleServer {
 
     private static ArrayList<String> breakUpStringIntoPackets(String string) {
         int length = string.length();
-        ArrayList<String > packets;
+        ArrayList<String> packets;
         if (length >= 20) {
             packets = new ArrayList<>();
             int packetLength = length / 20;
