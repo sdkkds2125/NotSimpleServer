@@ -62,7 +62,7 @@ public class NotSimpleServer {
         int totalPackets = arrayList.size();
         for (int i = 0; i < arrayList.size(); i++) {
 
-            int idNum = i + 1;
+            int idNum = i;
             if (Math.random() < .8) {
                 responseWriter1.println(idNum + "$" + totalPackets + "$" + arrayList.get(i));
             }

@@ -57,6 +57,8 @@ public class NotSimpleClient {
 //                        requestWriter.println(dropped);
 //                        wasDropped = false;
 //                    } else {
+                String done = String.join("",packetsReceived);
+                System.out.println(done);
                         System.out.println(Arrays.toString(packetsReceived));
                         System.out.println(serverResponse);
                  //   }
