@@ -1,15 +1,81 @@
-public class Main {
-    public static void main(String[] args) {
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
+public class Main {
+    static String[] packetsReceived2 = new String[20];
+    static String dropped2;
+    static String[] resendingDrops = new String[20];
+    static boolean wasDropped2 = false;
+    static ArrayList<Integer> nums = new ArrayList<>();
+    public static void main(String[] args) {
+        for (int i = 0; i < 20; i++) {
+            nums.add(i);
+        }
         System.out.println("Hello world!");
         String[] packets = new String[21];
         System.out.println(quotes[0].length());
         String s = "DROPPED$45$3$2$56";
         packets = breakUpStringIntoPackets(s);
-
+        do {
+            for (int i = 0; i < packetsReceived2.length - 3; i++) {
+                String temp = (i + 1) + "$20$filler";
+                parsePacket(temp);
+            }
+            System.out.println(Arrays.toString(packetsReceived2));
+            checkedForDroppedPackets();
+            System.out.println(dropped2);
 //        for (String p : packets) {
 //            System.out.print(p);
 //        }
+            String[] droppedPackets2 = dropped2.split("\\$");
+            String[] replacements = resendDroppedPackets(droppedPackets2);
+            String[] temp;
+            for (int i = 0; i < replacements.length; i++) {
+                if (!Objects.equals(replacements[i], "temp")) {
+                    temp = replacements[i].split("\\$");
+
+                    packetsReceived2[Integer.parseInt(temp[0])] = temp[2];
+                }
+            }
+            System.out.println("resutl:::::");
+            System.out.println(Arrays.toString(packetsReceived2));
+        }while (wasDropped2);
+    }
+    private static String[] resendDroppedPackets(String[] droppedPackets){
+       // resendingDrops = new ArrayList<>();
+        Arrays.fill(resendingDrops, "temp");
+        for (int i = 1; i < droppedPackets.length; i++){
+            if (Math.random() < .8) {
+                resendingDrops[i] = (droppedPackets[i] + "$" + (droppedPackets.length-1) + "$text" +
+                        nums.get(Integer.parseInt(droppedPackets[i])));
+            }
+        }
+//        responseWriter1.println("***ALL PACKETS SENT***");
+        return resendingDrops;
+    }
+    private static void checkedForDroppedPackets() {
+        wasDropped2 = false;
+        dropped2 = "DROPPED";
+        for (int i = 0; i < packetsReceived2.length; i++) {
+            // for (int i = 0; i < 20; i++){
+//
+            if (packetsReceived2[i] == null) {
+                dropped2 += "$" + i;
+                wasDropped2 = true;
+            }
+        }
+    }
+    private static void parsePacket(String packet) {
+        System.out.println("packet: " + packet);
+        String[] parsed = packet.split("\\$");
+        for (int i = 0; i < parsed.length; i++) {
+            System.out.println(parsed[i]);
+        }
+        int index = Integer.parseInt(parsed[0]) - 1;
+        packetsReceived2[index] = parsed[2];
+        //received[index] = true;
     }
 
     private static String[] breakUpStringIntoPackets(String string) {

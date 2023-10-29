@@ -71,15 +71,14 @@ public class NotSimpleServer {
     }
 
     private static void resendDroppedPackets(PrintWriter responseWriter1, String[] droppedPackets){
+        // Start loop with 1 since first index in droppedPackets is "DROPPED"
         for (int i = 1; i < droppedPackets.length; i++){
             if (Math.random() < .8) {
                 responseWriter1.println(droppedPackets[i] + "$" + (droppedPackets.length-1) + "$" +
                         packets.get(Integer.parseInt(droppedPackets[i])));
             }
         }
-
         responseWriter1.println("***ALL PACKETS SENT***");
-
     }
 
     private static String getQuote(String input) {
